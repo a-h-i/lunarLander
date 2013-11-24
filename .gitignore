@@ -1,4 +1,5 @@
 *.o
-lunarLander
-lunar-dbg
-lunar-profile
+lander
+lander-dbg
+lander-profile
+*.dblite
