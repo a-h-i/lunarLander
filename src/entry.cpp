@@ -46,15 +46,20 @@ int main() {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClearDepth(0.0f);
 
-    ui::FuelControl fc(-0.5);
-    ui::FuelView fv(fc);
+    //ui::FuelControl fc(-0.5);
+    //ui::FuelView fv(&fc);
 
+    ui::ShipControl sc;
+    ui::ShipView sv(&sc);
+    //fc.updateLevel();
     while(!glfwWindowShouldClose(window)) {
         glfwPollEvents();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         // draw ui
-        fv.draw();
+        //fv.draw();
+        sv.draw();
         glfwSwapBuffers(window);
+        
     }
 
     return EXIT_SUCCESS;
