@@ -4,6 +4,10 @@ flat in float vExtra;
 out vec4 outColor;
 
 void main() {
-    outColor = oColor;
     
+    if(vExtra == 10.0f) {
+        outColor = vec4(0.0f, 0.0f, 0.0f);
+    }else {
+        outColor = oColor;
+    }
 }

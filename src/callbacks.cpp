@@ -15,6 +15,4 @@ void cbs::key(GLFWwindow * window, int key, int scancode, int action, int mods) 
 
 void cbs::resize(GLFWwindow * window, const int w, const int h) {
     glViewport( 0, 0, w, h );
-    windowWidth = w;
-    windowHeight = h;
 }

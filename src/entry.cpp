@@ -22,8 +22,8 @@ int main() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    windowWidth = 400;
-    windowHeight = 400;
+    const int windowWidth = 400;
+    const int windowHeight = 400;
     GLFWwindow * window = glfwCreateWindow(windowWidth, windowHeight, "Lunar Lander", nullptr, nullptr );
     if(window == nullptr) {
         std::cerr << "Coult not create Window\n";
@@ -46,18 +46,11 @@ int main() {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClearDepth(0.0f);
 
-    //ui::FuelControl fc(-0.5);
-    //ui::FuelView fv(&fc);
-
-    ui::ShipControl sc;
-    ui::ShipView sv(&sc);
-    //fc.updateLevel();
     while(!glfwWindowShouldClose(window)) {
         glfwPollEvents();
+        // draw
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        // draw ui
-        //fv.draw();
-        sv.draw();
+
         glfwSwapBuffers(window);
         
     }

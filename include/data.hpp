@@ -1,20 +1,44 @@
 #pragma once
 #include "project_headers.hpp"
+#include "graphics.hpp"
 #include <array>
 namespace data {
 
+
    
     namespace fuel {
+        constexpr std::size_t verticesCount = 16;
+        constexpr std::size_t indiciesCount = 24;
+        constexpr std::size_t innerLeftFillTopEnd = 10;
+        constexpr std::size_t innerLeftFillButtomEnd = 11;
+        constexpr std::size_t innerRightFillTopEnd = 14;
+        constexpr std::size_t innerRightFillButtomEnd = 15;
+        extern std::array<graphics::Vertex, verticesCount> vertices;
+        extern std::array<GLushort, indiciesCount> indicies;
+
+        inline setInnerLeftEnd(graphics::Vertex & top, graphics::Vertex & buttom) {
+            vertices[innerLeftFillTopEnd] = top;
+            vertices[innerLeftFillButtomEnd] = buttom;
+        }
+
+        inline setInnerRightEnd(graphics::Vertex & top, graphics::Vertex &buttom) {
+            vertices[innerRightFillTopEnd] = top;
+            vertices[innerRightFillButtomEnd] = buttom;
+        }
 
     }
 
 
     namespace ship {
+        constexpr std::size_t verticesCount = 0;
+        constexpr std::size_t indiciesCount = 0;
+        extern std::array<graphics::Vertex, verticesCount> vertices;
+        extern std::array<GLushort, indiciesCount> indicies;
 
     }
 
     namespace terrain {
-        
+
     }
 
 
