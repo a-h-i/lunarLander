@@ -67,14 +67,20 @@ void Game::render() {
 
 bool Game::terrainCollideHelper() {
 
-     float currentTop = ship.pos.y + (shipHeight / 2.0f) * shipScaleY;
      float currentButtom = ship.pos.y - (shipHeight / 2.0f) * shipScaleY;
      float currentRight =  ship.pos.x + (shipWidth / 2.0f) * shipScaleX;
      float currentLeft =  ship.pos.x - (shipWidth / 2.0f) * shipScaleX;
+
+     constexpr float leftLineSlope = ((-0.4f) - (-1.0f) ) / ( 0.5f - 0.25f );
+     constexpr float rightLineSlope = ((-1.0f) - (-0.4f)) / (0.75f - 0.5f);
+     constexpr float leftIntercept = -1.6f;
+     constexpr  float rightIntercept = 0.8f;
+
      if(currentButtom <= -1.0f) {
         return true;
     }
 
+    // on pad
     if( (currentButtom <= -0.75f) & (currentRight <= -0.21f ) & (currentLeft >= -0.51f) ) {
         if(!won) {
             std::cout << "Congratulations Pilot !\n";
@@ -82,6 +88,23 @@ bool Game::terrainCollideHelper() {
         won = true;        
         return true;
     }
+
+    //collided with rect
+    if ( (currentButtom < -0.75f) & (currentLeft <= -0.2f) & (currentRight >= -0.5f) ) {
+        return true;
+    }
+    // collided with triangle
+    if(currentButtom <= -0.4f) {
+        if((currentButtom <= (leftLineSlope * currentRight + leftIntercept) ) && currentRight >= 0.25f && currentRight <=0.5f ) {
+            return true;
+        }
+
+        if ( ( currentButtom <= rightLineSlope * currentLeft + rightIntercept ) && currentLeft <= 0.75f && currentLeft >= 0.5f  ){
+            return true;
+        }
+    }
+
+
     
     return false;
 }
@@ -108,9 +131,7 @@ void Game::moveLeft(){
         auto const shipPos = ship.pos;
         ship.pos = shipPos + pulse; // translate
         
-        if (terrainCollideHelper()) {
-            ship.pos.x = shipPos.x;
-        }else if(ship.pos.x <= (-1.0f - (shipWidth / 2.0f) * shipScaleX ) )  {
+      if(ship.pos.x <= (-1.0f - (shipWidth / 2.0f) * shipScaleX ) )  {
             // screen boundry
             ship.pos.x = -1.0f;
         }
@@ -123,9 +144,7 @@ void Game::moveRight() {
         auto const shipPos = ship.pos;
         ship.pos = shipPos + pulse; // translate
         
-        if (terrainCollideHelper()) {
-            ship.pos.x =  shipPos.x;
-        }if(ship.pos.x >= (1.0f - (shipWidth / 2.0f) * shipScaleX) ) {
+       if(ship.pos.x >= (1.0f - (shipWidth / 2.0f) * shipScaleX) ) {
             // screen boundry
             ship.pos.x = 1.0f;
         }
@@ -138,9 +157,7 @@ void Game::moveUp() {
         static glm::vec3 pulse(0.0f, deltaMove, 0.0f);
         auto const shipPos = ship.pos;
         ship.pos = shipPos + pulse; // translate
-        if (terrainCollideHelper()) {
-            ship.pos.y = shipPos.y ;
-        }if(ship.pos.y >= (1.0f - (shipHeight / 2.0f) * shipScaleY ) )  {
+        if(ship.pos.y >= (1.0f - (shipHeight / 2.0f) * shipScaleY ) )  {
             // screen boundry
             ship.pos.y = 1.0f;
         }
@@ -154,7 +171,7 @@ void Game::moveDown(){
         static glm::vec3 pulse(0.0f, -deltaMove, 0.0f);
         auto const shipPos = ship.pos;
         ship.pos = shipPos + pulse; // translate
-        if(terrainCollideHelper()) {
+        if(ship.pos.y <= -1.0f) {
             // screen boundry
             ship.pos.y = shipPos.y;
         }
