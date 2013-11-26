@@ -1,17 +1,28 @@
 #include "graphics.hpp"
 #include "data.hpp"
 
+const std::string graphics::GENERIC_VSHADER_PATH("shaders/vertex.glsl");
+const std::string graphics::GENERIC_FSHADER_PATH("shaders/frag.glsl");
+const std::string graphics::GENEREIC_SHADER_MAT("mvp");
+
 static constexpr std::size_t INDEX_VBO = 0;
 static constexpr std::size_t VERTEX_VBO = 1;
 static constexpr std::size_t POS_ATTRIB = 0;
 static constexpr std::size_t COLOR_ATTRIB = 1;
 static constexpr std::size_t EXTRA_ATTRIB = 2;
+
+
 static constexpr std::size_t FUEL_VERT_OFFSET = 0;
 static constexpr std::size_t SHIP_VERT_OFFSET = FUEL_VERT_OFFSET + data::fuel::verticesCount;
 static constexpr std::size_t TERRAIN_VERT_OFFSET = SHIP_VERT_OFFSET + data::ship::verticesCount;
 
+
 static constexpr std::size_t FUEL_INDICIES_OFFSET = 0;
+static constexpr std::size_t FUEL_OUTER_INDICIES_OFFSET = 12;
+static constexpr std::size_t FUEL_INNER_INDICIES_OFFSET = 0;
+
 static constexpr std::size_t SHIP_INDICIES_OFFSET = FUEL_INDICIES_OFFSET + data::fuel::indiciesCount;
+
 static constexpr std::size_t TERRAIN_INDICIES_OFFSET = SHIP_INDICIES_OFFSET + data::ship::indiciesCount;
 
 graphics::Graphics::Graphics() {
@@ -45,34 +56,36 @@ graphics::Graphics::Graphics() {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbos[INDEX_VBO]);
     std::vector<GLushort> indicies(data::totalIndicies);
     for(std::size_t i = 0; i < data::fuel::indiciesCount; i++) {
-        indicies[i + FUEL_INDICIES_OFFSET] = data::fuel::indicies[i];
+        indicies[i + FUEL_INDICIES_OFFSET] = data::fuel::indicies[i] + FUEL_VERT_OFFSET;
     }
     for(std::size_t i = 0; i < data::ship::indiciesCount; i++) {
-        indicies[i + SHIP_INDICIES_OFFSET] = data::ship::indicies[i];
+        indicies[i + SHIP_INDICIES_OFFSET] = data::ship::indicies[i] + SHIP_VERT_OFFSET;
     }
 
     for(std::size_t i = 0 ; i < data::terrain::indiciesCount; i++) {
-        indicies[i + TERRAIN_INDICIES_OFFSET] = data::terrain::indicies[i];
+        indicies[i + TERRAIN_INDICIES_OFFSET] = data::terrain::indicies[i] + TERRAIN_VERT_OFFSET;
     }
 
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, data::totalIndicies * sizeof(GLushort), &indicies[0], GL_STATIC_DRAW);
 }
 
 void graphics::Graphics::drawFuel() {
-    glDrawElements(GL_TRIANGLES, data::fuel::indiciesCount, GL_UNSIGNED_SHORT, (void *) FUEL_INDICIES_OFFSET);
+    glDrawElements(GL_TRIANGLES, data::fuel::innerIndiciesCount, GL_UNSIGNED_SHORT, (void *) (sizeof(GLushort) * FUEL_INNER_INDICIES_OFFSET));
+    glDrawElements(GL_LINE_LOOP, data::fuel::outerIndiciesCount, GL_UNSIGNED_SHORT, (void *) (sizeof(GLushort) * FUEL_OUTER_INDICIES_OFFSET));
 }
 
 void graphics::Graphics::drawShip() {
-    glDrawElements(GL_TRIANGLES, data::ship::indiciesCount, GL_UNSIGNED_SHORT, (void *) SHIP_INDICIES_OFFSET);
+    glDrawElements(GL_TRIANGLES, data::ship::indiciesCount, GL_UNSIGNED_SHORT, (void *) (sizeof(GLushort) * SHIP_INDICIES_OFFSET));
 }
 
 void graphics::Graphics::drawTerrain() {
-    glDrawElements(GL_LINES, data::terrain::indiciesCount, GL_UNSIGNED_SHORT, (void *) TERRAIN_INDICIES_OFFSET);
+    glDrawElements(GL_LINES, data::terrain::indiciesCount, GL_UNSIGNED_SHORT, (void *) (sizeof(GLushort) * TERRAIN_INDICIES_OFFSET));
 }
 
 void graphics::Graphics::updateShipModel() {
     glBufferSubData(GL_ARRAY_BUFFER, SHIP_VERT_OFFSET * sizeof(Vertex),
                     sizeof(Vertex) * data::ship::verticesCount, &data::ship::vertices[0]);
+
 }
 
 void graphics::Graphics::updateTerrainModel() {

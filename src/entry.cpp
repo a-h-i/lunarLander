@@ -1,12 +1,13 @@
 #include "project_headers.hpp"
 #include "callbacks.hpp"
-
-
+#include "graphics.hpp"
+#include "entities.hpp"
+#include "game.hpp"
 #include <boost/scope_exit.hpp>
 #include <iostream>
 #include <cstdlib>
 
-
+Game * gamePtr = nullptr;
 
 int main() {
     glfwSetErrorCallback(cbs::glfwError);
@@ -45,12 +46,15 @@ int main() {
     cbs::resize(window, windowHeight, windowWidth);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClearDepth(0.0f);
+    graphics::Graphics g;
+    Game game(&g);
+    gamePtr = &game;
 
     while(!glfwWindowShouldClose(window)) {
         glfwPollEvents();
         // draw
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+        game.render();
         glfwSwapBuffers(window);
         
     }

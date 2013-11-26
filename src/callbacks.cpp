@@ -1,4 +1,5 @@
 #include "callbacks.hpp"
+#include "game.hpp"
 #include <iostream>
 
 
@@ -9,8 +10,21 @@ void cbs::glfwError(int errorCode, const char * description) {
 
 void cbs::key(GLFWwindow * window, int key, int scancode, int action, int mods) {
     if ( (key == GLFW_KEY_ESCAPE) & (action == GLFW_PRESS) ) {
+        // close window
         glfwSetWindowShouldClose( window, GL_TRUE );
+    }else if( (key == GLFW_KEY_RIGHT) & (action == GLFW_PRESS) ) {
+        gamePtr->moveRight();
+    }else if( (key == GLFW_KEY_LEFT) & (action == GLFW_PRESS) ) {
+        gamePtr->moveLeft();
+    }else if( (key == GLFW_KEY_DOWN) & (action == GLFW_PRESS) ) {
+        gamePtr->moveDown();
+    }else if( (key == GLFW_KEY_UP) & (action == GLFW_PRESS) ) {
+        gamePtr->moveUp();
+    }else if( (key == GLFW_KEY_ENTER) & (action == GLFW_PRESS) ) {
+        //restart game
+        gamePtr->reset();
     }
+
 }
 
 void cbs::resize(GLFWwindow * window, const int w, const int h) {

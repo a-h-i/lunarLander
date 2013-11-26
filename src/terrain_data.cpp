@@ -3,10 +3,10 @@
 using namespace graphics;
 std::array<graphics::Vertex, data::terrain::verticesCount> data::terrain::vertices = {
     {
-        {glm::vec2(-1.0f, 0.0f), tc}, {glm::vec2(-0.4f, 0.0f), tc},
-        {glm::vec2(-0.4f, 0.5f), tc}, {glm::vec2(-0.2f, 0.5f), tc},
-        {glm::vec2(-0.2f, 0.0f), tc}, {glm::vec2(0.15f, 0.0f), tc},
-        {glm::vec2(0.25f, 0.6f), tc}, {glm::vec2(0.4f, 0.0f), tc},
+        {glm::vec2(-1.0f, 0.0f), tc}, {glm::vec2(-0.5f, 0.0f), tc},
+        {glm::vec2(-0.5f, 0.25f), tc}, {glm::vec2(-0.2f, 0.25f), tc},
+        {glm::vec2(-0.2f, 0.0f), tc}, {glm::vec2(0.25f, 0.0f), tc},
+        {glm::vec2(0.5f, 0.6f), tc}, {glm::vec2(0.75f, 0.0f), tc},
         {glm::vec2(1.0f, 0.0f), tc}
 
     }};

@@ -36,13 +36,13 @@ profile.Append( LINKFLAGS = Split(' -fPIE -pg') )
 
 
 #targets
-d_objs = make_package(debug, 'dbg', 'src')
+d_objs = make_package(debug, 'dbg', 'src') + make_package(debug, 'dbg', 'src/entities')
 d_target = debug.Program('lander-dbg', d_objs, LIBS=libs, LIBPATH='lib')
 
-r_objs = make_package(release, 'rel', 'src')
+r_objs = make_package(release, 'rel', 'src') + make_package(release, 'rel', 'src/entities')
 r_target = release.Program('lander', r_objs, LIBS=libs, LIBPATH='lib')
 
-p_objs = make_package(profile, 'prof', 'src')
+p_objs = make_package(profile, 'prof', 'src') + make_package(profile, 'prof', 'src/entities')
 p_target = profile.Program('lander-profile', p_objs, LIBS=libs, LIBPATH='lib')
 
 Default(d_target)

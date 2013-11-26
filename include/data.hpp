@@ -8,20 +8,24 @@ namespace data {
    
     namespace fuel {
         constexpr std::size_t verticesCount = 16;
-        constexpr std::size_t indiciesCount = 24;
+        constexpr std::size_t indiciesCount = 20;
         constexpr std::size_t innerLeftFillTopEnd = 10;
         constexpr std::size_t innerLeftFillButtomEnd = 11;
         constexpr std::size_t innerRightFillTopEnd = 14;
         constexpr std::size_t innerRightFillButtomEnd = 15;
+        constexpr std::size_t outerIndiciesCount = 8;
+        constexpr std::size_t innerIndiciesCount = 12;
+
+
         extern std::array<graphics::Vertex, verticesCount> vertices;
         extern std::array<GLushort, indiciesCount> indicies;
 
-        inline void setInnerLeftEnd(graphics::Vertex & top, graphics::Vertex & buttom) {
+        inline void setInnerLeftEnd(const graphics::Vertex & top, const graphics::Vertex & buttom) {
             vertices[innerLeftFillTopEnd] = top;
             vertices[innerLeftFillButtomEnd] = buttom;
         }
 
-        inline void setInnerRightEnd(graphics::Vertex & top, graphics::Vertex &buttom) {
+        inline void setInnerRightEnd(const graphics::Vertex & top, const graphics::Vertex &buttom) {
             vertices[innerRightFillTopEnd] = top;
             vertices[innerRightFillButtomEnd] = buttom;
         }
