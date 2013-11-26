@@ -120,6 +120,7 @@ bool Game::isGameover() {
 void Game::reset() {
     fuel.reset();
     ship.pos.x = ship.pos.y = 0.0f;
+    won = false;
 
 }
 
