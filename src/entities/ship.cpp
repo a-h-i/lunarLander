@@ -5,7 +5,7 @@
 entities::Ship::Ship() : shader(utility::loadShader(graphics::GENERIC_VSHADER_PATH,
                                  graphics::GENERIC_FSHADER_PATH)),
                                  matLocation(glGetUniformLocation(shader, 
-                                    graphics::GENEREIC_SHADER_MAT.c_str())) {}
+                                    graphics::GENEREIC_SHADER_MAT.c_str())), pos(0.0f, 0.0f, 0.0f) {}
 
 void entities::Ship::render(graphics::Graphics *g, glm::mat4 &mvp) {
     glUseProgram(shader);

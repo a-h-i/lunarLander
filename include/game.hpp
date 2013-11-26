@@ -12,7 +12,9 @@ class Game {
     entities::Ship ship;
     std::chrono::time_point<std::chrono::system_clock> start;
     long long  units;
+    bool won;
     bool isGameover();
+    bool terrainCollideHelper();
 public:
     Game(graphics::Graphics * g);
     void render();

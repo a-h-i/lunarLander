@@ -6,14 +6,7 @@
 
 namespace component {
 
-    struct Pos {
-        glm::vec2 point;
-    };
 
-    struct Velocity {
-        float velocity;
-        glm::vec2 direction;
-    };
 
     struct Percent {
     private:
@@ -64,6 +57,7 @@ namespace entities {
         Ship();
         void render(graphics::Graphics *g, glm::mat4 &mvp);
         ~Ship();
+        glm::vec3 pos;
 
     };
     class Fuel {

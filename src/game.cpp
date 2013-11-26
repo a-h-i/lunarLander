@@ -1,22 +1,43 @@
 #include "game.hpp"
+#include "utility.hpp"
+#include <iostream>
 
+constexpr float shipScaleY = 0.1f;
+constexpr float shipScaleX = 0.1f;
+constexpr float shipHeight = 0.85;
+constexpr float shipWidth = 1.0f;
+ 
 
-Game::Game(graphics::Graphics * g): g(g), units(2) {
+Game::Game(graphics::Graphics * g): g(g), units(2), won(false) {
     // reference time
     start = std::chrono::system_clock::now();
 }
 
+inline void checkScreenBoundries(glm::vec3 &pos){
+    pos.x = utility::math::clamp(pos.x, 1.0f - (shipWidth / 2.0f) * shipScaleX, -1.0f - (shipWidth / 2.0f) * shipScaleX);
+    pos.y = utility::math::clamp(pos.y, 1.0f - (shipHeight / 2.0f) * shipScaleY
+                                , -1.0f - (shipHeight / 2.0f) * shipScaleY );
+}
+
+
 
 void Game::render() {
 
-    if(!isGameover()) {
+
+
+    
 
         // get current time
         auto now = std::chrono::system_clock::now();
         auto ticks = std::chrono::duration_cast<std::chrono::milliseconds>(now - start).count() / 250;
-        if(ticks > units) {
-            units+= 2; // each time unit is 500 ms which corresponds to 1% fuel usage
+        if(ticks > units && !isGameover()) {
+            units+= 2; 
+            // each time unit is 500 ms which corresponds to 1% fuel usage
             fuel.clockTick();
+            // apply gravity each timeUnit
+            static glm::vec3 grav(0.0f, -0.02f, 0.0f);
+            ship.pos += grav;
+            checkScreenBoundries(ship.pos);
         }
         // constant projection matrix
         static glm::mat4 projection = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f);
@@ -35,31 +56,108 @@ void Game::render() {
 
         //ship rendering
         // ship scale matrix is static
-        static glm::mat4 shipScale = glm::scale(glm::mat4(), glm::vec3(0.1f, 0.1f, 1.0f));
-        glm::mat4 shipMVP = projection * shipScale;
+        static glm::mat4 shipScale = glm::scale(glm::mat4(), glm::vec3(shipScaleX, shipScaleY, 1.0f));
+        // move to position 
+        // Ship originaly centered at origin (model space)
+        glm::mat4 shipTranslate = glm::translate(glm::mat4(), ship.pos);
+        glm::mat4 shipMVP = projection * shipTranslate * shipScale;
         ship.render(g, shipMVP);
+    
+}
+
+bool Game::terrainCollideHelper() {
+
+     float currentTop = ship.pos.y + (shipHeight / 2.0f) * shipScaleY;
+     float currentButtom = ship.pos.y - (shipHeight / 2.0f) * shipScaleY;
+     float currentRight =  ship.pos.x + (shipWidth / 2.0f) * shipScaleX;
+     float currentLeft =  ship.pos.x - (shipWidth / 2.0f) * shipScaleX;
+     if(currentButtom <= -1.0f) {
+        return true;
     }
+
+    if( (currentButtom <= -0.75f) & (currentRight <= -0.21f ) & (currentLeft >= -0.51f) ) {
+        if(!won) {
+            std::cout << "Congratulations Pilot !\n";
+        }
+        won = true;        
+        return true;
+    }
+    
+    return false;
 }
 
 bool Game::isGameover() {
 
     bool fuelEmpty = fuel.isEmpty();
-    return (fuelEmpty);
+    //buttom of ship area box
+    bool collide = terrainCollideHelper();
+    return fuelEmpty | collide;
 }
 
 void Game::reset() {
     fuel.reset();
+    ship.pos.x = ship.pos.y = 0.0f;
+
 }
+
+constexpr float deltaMove = 0.05f;
 
 void Game::moveLeft(){
-
+    if(!isGameover()) {
+        static glm::vec3 pulse(-deltaMove, 0.0f, 0.0f);
+        auto const shipPos = ship.pos;
+        ship.pos = shipPos + pulse; // translate
+        
+        if (terrainCollideHelper()) {
+            ship.pos.x = shipPos.x;
+        }else if(ship.pos.x <= (-1.0f - (shipWidth / 2.0f) * shipScaleX ) )  {
+            // screen boundry
+            ship.pos.x = -1.0f;
+        }
+        
+    }
 }
 void Game::moveRight() {
-
+    if(!isGameover()) {
+        static glm::vec3 pulse(deltaMove, 0.0f, 0.0f);
+        auto const shipPos = ship.pos;
+        ship.pos = shipPos + pulse; // translate
+        
+        if (terrainCollideHelper()) {
+            ship.pos.x =  shipPos.x;
+        }if(ship.pos.x >= (1.0f - (shipWidth / 2.0f) * shipScaleX) ) {
+            // screen boundry
+            ship.pos.x = 1.0f;
+        }
+        
+    }
 }
 void Game::moveUp() {
 
+    if(!isGameover()) {
+        static glm::vec3 pulse(0.0f, deltaMove, 0.0f);
+        auto const shipPos = ship.pos;
+        ship.pos = shipPos + pulse; // translate
+        if (terrainCollideHelper()) {
+            ship.pos.y = shipPos.y ;
+        }if(ship.pos.y >= (1.0f - (shipHeight / 2.0f) * shipScaleY ) )  {
+            // screen boundry
+            ship.pos.y = 1.0f;
+        }
+        
+
+    }
 }
 void Game::moveDown(){
 
+    if(!isGameover()) {
+        static glm::vec3 pulse(0.0f, -deltaMove, 0.0f);
+        auto const shipPos = ship.pos;
+        ship.pos = shipPos + pulse; // translate
+        if(terrainCollideHelper()) {
+            // screen boundry
+            ship.pos.y = shipPos.y;
+        }
+        
+    }
 }
