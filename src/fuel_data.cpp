@@ -23,12 +23,12 @@ std::array<Vertex, data::fuel::verticesCount> data::fuel::vertices = {
 std::array<GLushort, data::fuel::indiciesCount> data::fuel::indicies = {
     /*inner fill */
     /*left box*/
-    8, 9, 10, 8, 10, 11,
+    11, 8, 9, 11, 8, 10,
     /*right box */
-    12, 13, 14, 12, 14, 15,
+    15, 12, 13, 15, 12, 14,
     /*outer shell */
     /*left box */
-    0, 1, 2, 0, 2, 3
+    3, 0, 2, 3, 0, 1,
     /* right box */
-    4, 5, 6, 4, 6, 7
-}
+    7, 4, 5, 7, 4, 6
+  };

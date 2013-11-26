@@ -16,12 +16,12 @@ namespace data {
         extern std::array<graphics::Vertex, verticesCount> vertices;
         extern std::array<GLushort, indiciesCount> indicies;
 
-        inline setInnerLeftEnd(graphics::Vertex & top, graphics::Vertex & buttom) {
+        inline void setInnerLeftEnd(graphics::Vertex & top, graphics::Vertex & buttom) {
             vertices[innerLeftFillTopEnd] = top;
             vertices[innerLeftFillButtomEnd] = buttom;
         }
 
-        inline setInnerRightEnd(graphics::Vertex & top, graphics::Vertex &buttom) {
+        inline void setInnerRightEnd(graphics::Vertex & top, graphics::Vertex &buttom) {
             vertices[innerRightFillTopEnd] = top;
             vertices[innerRightFillButtomEnd] = buttom;
         }
@@ -30,15 +30,18 @@ namespace data {
 
 
     namespace ship {
-        constexpr std::size_t verticesCount = 0;
-        constexpr std::size_t indiciesCount = 0;
+        constexpr std::size_t verticesCount = 13;
+        constexpr std::size_t indiciesCount = 21;
         extern std::array<graphics::Vertex, verticesCount> vertices;
         extern std::array<GLushort, indiciesCount> indicies;
 
     }
 
     namespace terrain {
-
+        constexpr std::size_t verticesCount = 9;
+        constexpr std::size_t indiciesCount = 16;
+        extern std::array<graphics::Vertex, verticesCount> vertices;
+        extern std::array<GLushort, indiciesCount> indicies;
     }
 
 

@@ -16,20 +16,20 @@ libs = Split( ' -lXrandr -lXi -lpthread -lXxf86vm -lX11 -lGL -lGLU -lGLEW -lglfw
 debug = Environment(ENV = {'PATH' : os.environ['PATH']})
 debug['CXX'] = 'g++-4.8'
 debug['CXXFLAGS'] = '-Wall -std=c++1y -O0 -g -fPIE' + paths
-debug.Append( LINKFLAGS = Split('-Wl,-rpath=lib -fPIE') )
+debug.Append( LINKFLAGS = Split(' -fPIE') )
 
 #release options
 release = Environment(ENV = {'PATH' : os.environ['PATH']})
 release['CXX'] = 'g++-4.8'
 release['CXXFLAGS'] = '-Wall -std=c++1y -O3 -fPIE -flto' + paths
-release.Append( LINKFLAGS = Split('-Wl,-rpath=lib -O3 -flto -fPIE') )
+release.Append( LINKFLAGS = Split(' -O3 -flto -fPIE') )
 
 
 #profiling options
 profile = Environment(ENV = {'PATH' : os.environ['PATH']})
 profile['CXX'] = 'g++-4.8'
 profile['CXXFLAGS'] = '-Wall -std=c++1y -fPIE  -pg -g' + paths
-profile.Append( LINKFLAGS = Split('-Wl,-rpath=lib -fPIE -pg') )
+profile.Append( LINKFLAGS = Split(' -fPIE -pg') )
 
 
 
